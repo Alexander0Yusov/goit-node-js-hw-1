@@ -3,24 +3,20 @@ const path = require("path");
 const { nanoid } = require("nanoid");
 
 const contactsPath = path.join(__dirname, "/db/contacts.json");
-// const contactsPath = path.join(__dirname, "./db/contacts.json");
 
-// TODO: задокументувати кожну функцію
-async function listContacts() {
+async function getContactsList() {
   const data = await fs.readFile(contactsPath, "utf-8");
   return JSON.parse(data);
 }
 
 async function getContactById(contactId) {
-  // ...твій код. Повертає об'єкт контакту з таким id. Повертає null, якщо контакт з таким id не знайдений.
-  const allContacts = await listContacts();
+  const allContacts = await getContactsList();
   const result = allContacts.find((item) => item.id === contactId);
   return result || null;
 }
 
 async function removeContact(contactId) {
-  // ...твій код. Повертає об'єкт видаленого контакту. Повертає null, якщо контакт з таким id не знайдений.
-  const allContacts = await listContacts();
+  const allContacts = await getContactsList();
   const index = allContacts.findIndex((item) => item.id === contactId);
   if (index === -1) {
     return null;
@@ -31,9 +27,8 @@ async function removeContact(contactId) {
 }
 
 async function addContact({ name, email, phone }) {
-  // ...твій код. Повертає об'єкт доданого контакту.
   const newContact = { id: nanoid(), name, email, phone };
-  const allContacts = await listContacts();
+  const allContacts = await getContactsList();
   allContacts.push(newContact);
   fs.writeFile(contactsPath, JSON.stringify(allContacts, null, 2));
   return newContact;
@@ -43,5 +38,5 @@ module.exports = {
   getContactById,
   removeContact,
   addContact,
-  listContacts,
+  getContactsList,
 };
